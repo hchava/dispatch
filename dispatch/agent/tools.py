@@ -3,9 +3,14 @@
 SEARCH_CONTEXT_TOOL = {
     "name": "search_context",
     "description": (
-        "Search the knowledge base for relevant runbooks, data contracts, and "
-        "prior incident resolutions. Use specific terms from the alert — pipeline "
-        "name, error type, metric name — to get precise results."
+        "Search the knowledge base for context relevant to an oncall alert. "
+        "The knowledge base contains: runbooks (triage steps), data contracts "
+        "(schema, SLA, ownership, upstream/downstream dependencies), prior incident "
+        "resolutions, code patterns (backfill, schema repair, exactly-once writes), "
+        "and validation examples (row count, null rate, distribution bounds checks). "
+        "Use specific terms from the alert — pipeline name, error type, metric name, "
+        "column name — to get precise results. Call multiple times with different "
+        "queries to build complete context."
     ),
     "input_schema": {
         "type": "object",
@@ -17,8 +22,16 @@ SEARCH_CONTEXT_TOOL = {
             },
             "source_types": {
                 "type": "array",
-                "items": {"type": "string", "enum": ["runbook", "contract", "incident"]},
-                "description": "Limit results to specific document types. Omit to search all.",
+                "items": {
+                    "type": "string",
+                    "enum": ["runbook", "contract", "incident", "code_pattern", "validation_example"],
+                },
+                "description": (
+                    "Limit results to specific document types. "
+                    "runbook=triage steps, contract=schema/SLA/ownership, "
+                    "incident=prior resolutions, code_pattern=fix recipes, "
+                    "validation_example=test expectations. Omit to search all."
+                ),
             },
             "pipeline": {
                 "type": "string",

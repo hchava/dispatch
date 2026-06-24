@@ -20,6 +20,12 @@ def load_corpus(corpus_dir: Path, store: VectorStore) -> int:
     for incident in (corpus_dir / "incidents").glob("*.md"):
         chunks.extend(chunk_markdown(incident, source_type="incident"))
 
+    for pattern in (corpus_dir / "code_patterns").glob("*.md"):
+        chunks.extend(chunk_markdown(pattern, source_type="code_pattern"))
+
+    for example in (corpus_dir / "validation_examples").glob("*.md"):
+        chunks.extend(chunk_markdown(example, source_type="validation_example"))
+
     store.upsert(chunks)
     return len(chunks)
 
