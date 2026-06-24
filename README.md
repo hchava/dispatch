@@ -1,8 +1,8 @@
-# Pincer
+# Dispatch
 
 **AI agent that triages pipeline oncall incidents using RAG over runbooks, data contracts, and prior resolutions.**
 
-Engineers rebuilding context from scratch every on-call shift is the most expensive form of toil in a data platform org. Pincer eliminates it: when an alert fires, the agent retrieves the relevant runbook, matches it against prior incidents, checks the owning pipeline's data contract, and produces a structured triage report — severity, likely root cause, recommended action, and an escalation decision — before a human touches the page.
+Engineers rebuilding context from scratch every on-call shift is the most expensive form of toil in a data platform org. Dispatch eliminates it: when an alert fires, the agent retrieves the relevant runbook, matches it against prior incidents, checks the owning pipeline's data contract, and produces a structured triage report — severity, likely root cause, recommended action, and an escalation decision — before a human touches the page.
 
 Built as a clean-room reference implementation of the pattern described in [this write-up](#architecture).
 
@@ -44,9 +44,9 @@ Triage report  (or)  Escalation packet → PagerDuty / Slack
 
 | Layer | Component | What it does |
 |-------|-----------|-------------|
-| **Ingest** | `pincer/ingest/` | Chunks runbooks, contracts, incidents → embeds → loads into ChromaDB |
-| **Retrieve** | `pincer/retrieve/` | Semantic search with metadata filtering (by source type, pipeline, severity) |
-| **Agent** | `pincer/agent/` | Claude orchestrator uses `search_context` as a tool; reasons over results; emits structured triage |
+| **Ingest** | `dispatch/ingest/` | Chunks runbooks, contracts, incidents → embeds → loads into ChromaDB |
+| **Retrieve** | `dispatch/retrieve/` | Semantic search with metadata filtering (by source type, pipeline, severity) |
+| **Agent** | `dispatch/agent/` | Claude orchestrator uses `search_context` as a tool; reasons over results; emits structured triage |
 
 ### Design decisions
 
@@ -63,15 +63,15 @@ Triage report  (or)  Escalation packet → PagerDuty / Slack
 ## Quickstart
 
 ```bash
-git clone https://github.com/hchava/pincer
-cd pincer
+git clone https://github.com/hchava/dispatch
+cd dispatch
 python -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
 
 export ANTHROPIC_API_KEY=sk-...
 
 # Build the vector store from the sample corpus
-python -m pincer.ingest.loader --corpus corpus/
+python -m dispatch.ingest.loader --corpus corpus/
 
 # Run a demo alert through the agent
 python demo/run_demo.py
@@ -85,7 +85,7 @@ python demo/run_demo.py
 $ python demo/run_demo.py
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-PINCER — Pipeline Oncall Triage Agent
+DISPATCH — Pipeline Oncall Triage Agent
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Alert: orders-fact daily refresh failed — row count dropped 94% vs 7d avg
@@ -158,8 +158,8 @@ resolution: schema drift — upstream added nullable col
 ## Project layout
 
 ```
-pincer/
-├── pincer/
+dispatch/
+├── dispatch/
 │   ├── ingest/        # chunk, embed, load corpus
 │   ├── retrieve/      # ChromaDB wrapper + semantic search
 │   ├── agent/         # Claude orchestrator + tool definitions
@@ -179,9 +179,9 @@ pincer/
 
 [Anvil](https://github.com/hchava/anvil) handles the **coordination** layer — multiple agents critiquing each other's reasoning before converging on a design.
 
-Pincer handles the **retrieval** layer — making sure an agent has the right context before it reasons at all.
+Dispatch handles the **retrieval** layer — making sure an agent has the right context before it reasons at all.
 
-In production, these compose: Pincer retrieves, Anvil coordinates across specialized sub-agents (researcher, developer, reviewer), HITL escalation gates the output.
+In production, these compose: Dispatch retrieves, Anvil coordinates across specialized sub-agents (researcher, developer, reviewer), HITL escalation gates the output.
 
 ---
 

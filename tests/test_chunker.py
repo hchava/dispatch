@@ -2,7 +2,7 @@ from pathlib import Path
 import textwrap
 import pytest
 
-from pincer.ingest.chunker import chunk_markdown, chunk_yaml_contract, _extract_frontmatter
+from dispatch.ingest.chunker import chunk_markdown, chunk_yaml_contract, _extract_frontmatter
 
 
 def test_frontmatter_extraction():

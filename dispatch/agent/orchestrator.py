@@ -1,5 +1,5 @@
 """
-Pincer orchestrator — retrieve → reason → triage.
+Dispatch orchestrator — retrieve → reason → triage.
 
 Claude uses search_context as a tool. The agent loop continues until
 Claude stops calling tools and emits the final triage JSON.
@@ -11,11 +11,11 @@ from dataclasses import dataclass
 
 import anthropic
 
-from pincer.config import CONFIG
-from pincer.retrieve.search import search, SearchResult
-from pincer.retrieve.store import VectorStore
-from pincer.agent.prompts import SYSTEM, TRIAGE_SCHEMA
-from pincer.agent.tools import SEARCH_CONTEXT_TOOL
+from dispatch.config import CONFIG
+from dispatch.retrieve.search import search, SearchResult
+from dispatch.retrieve.store import VectorStore
+from dispatch.agent.prompts import SYSTEM, TRIAGE_SCHEMA
+from dispatch.agent.tools import SEARCH_CONTEXT_TOOL
 
 
 @dataclass

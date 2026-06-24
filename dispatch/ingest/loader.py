@@ -4,8 +4,8 @@ from __future__ import annotations
 from pathlib import Path
 import click
 
-from pincer.ingest.chunker import chunk_markdown, chunk_yaml_contract, Chunk
-from pincer.retrieve.store import VectorStore
+from dispatch.ingest.chunker import chunk_markdown, chunk_yaml_contract, Chunk
+from dispatch.retrieve.store import VectorStore
 
 
 def load_corpus(corpus_dir: Path, store: VectorStore) -> int:
@@ -28,7 +28,7 @@ def load_corpus(corpus_dir: Path, store: VectorStore) -> int:
 @click.option("--corpus", default="corpus", help="Path to corpus directory")
 @click.option("--reset", is_flag=True, help="Wipe and rebuild the vector store")
 def main(corpus: str, reset: bool) -> None:
-    from pincer.retrieve.store import VectorStore
+    from dispatch.retrieve.store import VectorStore
     from rich.console import Console
 
     console = Console()

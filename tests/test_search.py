@@ -7,9 +7,9 @@ from pathlib import Path
 pytest.importorskip("chromadb")
 pytest.importorskip("sentence_transformers")
 
-from pincer.retrieve.store import VectorStore
-from pincer.retrieve.search import search
-from pincer.ingest.loader import load_corpus
+from dispatch.retrieve.store import VectorStore
+from dispatch.retrieve.search import search
+from dispatch.ingest.loader import load_corpus
 
 
 CORPUS = Path(__file__).parent.parent / "corpus"
@@ -19,10 +19,10 @@ CORPUS = Path(__file__).parent.parent / "corpus"
 def store(tmp_path_factory):
     import os
     tmp = tmp_path_factory.mktemp("chroma")
-    os.environ["PINCER_CHROMA_PATH"] = str(tmp)
+    os.environ["DISPATCH_CHROMA_PATH"] = str(tmp)
 
     # Patch CONFIG to use tmp path
-    import pincer.config as cfg
+    import dispatch.config as cfg
     original = cfg.CONFIG.chroma_path
     cfg.CONFIG.chroma_path = str(tmp)
 

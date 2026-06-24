@@ -3,8 +3,8 @@
 from __future__ import annotations
 from dataclasses import dataclass
 
-from pincer.retrieve.store import VectorStore
-from pincer.config import CONFIG
+from dispatch.retrieve.store import VectorStore
+from dispatch.config import CONFIG
 
 
 @dataclass

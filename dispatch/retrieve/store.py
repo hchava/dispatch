@@ -5,8 +5,8 @@ from typing import Any
 import chromadb
 from chromadb.utils import embedding_functions
 
-from pincer.config import CONFIG
-from pincer.ingest.chunker import Chunk
+from dispatch.config import CONFIG
+from dispatch.ingest.chunker import Chunk
 
 
 class VectorStore:

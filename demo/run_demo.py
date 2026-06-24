@@ -17,11 +17,11 @@ from rich.panel import Panel
 from rich.table import Table
 from rich import box
 
-from pincer.retrieve.store import VectorStore
-from pincer.ingest.loader import load_corpus
-from pincer.agent.orchestrator import Alert, triage
-from pincer.escalation.handler import maybe_escalate
-from pincer.config import CONFIG
+from dispatch.retrieve.store import VectorStore
+from dispatch.ingest.loader import load_corpus
+from dispatch.agent.orchestrator import Alert, triage
+from dispatch.escalation.handler import maybe_escalate
+from dispatch.config import CONFIG
 
 SAMPLE_ALERTS = [
     Alert(
@@ -43,7 +43,7 @@ def run(alert_index: int = 0) -> None:
     console = Console()
     alert = SAMPLE_ALERTS[alert_index]
 
-    console.rule("[bold cyan]PINCER — Pipeline Oncall Triage Agent[/bold cyan]")
+    console.rule("[bold cyan]DISPATCH — Pipeline Oncall Triage Agent[/bold cyan]")
     console.print()
 
     # Build vector store from sample corpus

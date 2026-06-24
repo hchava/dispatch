@@ -4,7 +4,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import datetime, timezone
 
-from pincer.agent.orchestrator import Alert, TriageReport
+from dispatch.agent.orchestrator import Alert, TriageReport
 
 
 @dataclass
@@ -20,7 +20,7 @@ class EscalationPacket:
             "blocks": [
                 {
                     "type": "header",
-                    "text": {"type": "plain_text", "text": f"🚨 Pincer Escalation — {self.alert.pipeline}"},
+                    "text": {"type": "plain_text", "text": f"🚨 Dispatch Escalation — {self.alert.pipeline}"},
                 },
                 {
                     "type": "section",

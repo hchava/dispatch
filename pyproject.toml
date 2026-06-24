@@ -3,9 +3,9 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.backends.legacy:build"
 
 [project]
-name = "pincer"
+name = "dispatch"
 version = "0.1.0"
-description = "AI agent for pipeline oncall triage via RAG over runbooks, contracts, and incidents"
+description = "AI oncall triage agent: RAG over runbooks, contracts, and incidents → structured triage + HITL escalation"
 requires-python = ">=3.11"
 dependencies = [
     "anthropic>=0.40.0",
