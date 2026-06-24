@@ -1,0 +1,52 @@
+pipeline: orders-fact
+owner: data-platform-team
+slack_channel: "#oncall-data-platform"
+sla: daily by 08:00 UTC
+freshness_threshold_hours: 26
+
+schema:
+  - name: order_id
+    type: STRING
+    nullable: false
+    description: Unique order identifier. Format ORD-{uuid}.
+  - name: user_id
+    type: STRING
+    nullable: false
+    description: User who placed the order.
+  - name: order_status
+    type: STRING
+    nullable: false
+    enum: [PLACED, CONFIRMED, SHIPPED, DELIVERED, CANCELLED]
+    description: Current lifecycle state of the order.
+  - name: order_total_usd
+    type: FLOAT
+    nullable: false
+    description: Total order value in USD including tax and shipping.
+  - name: created_at
+    type: TIMESTAMP
+    nullable: false
+    description: UTC timestamp when the order was placed.
+  - name: updated_at
+    type: TIMESTAMP
+    nullable: false
+    description: UTC timestamp of last status update.
+
+quality_rules:
+  - rule: row_count_vs_7d_avg
+    threshold: "drop > 20%"
+    severity: P1
+  - rule: null_rate_order_id
+    threshold: "> 0%"
+    severity: P0
+  - rule: null_rate_order_status
+    threshold: "> 0.1%"
+    severity: P1
+
+upstream_dependencies:
+  - pipeline: orders-raw
+    sla: daily by 06:00 UTC
+
+downstream_consumers:
+  - orders-daily-summary
+  - revenue-metrics-cube
+  - ml-feature-order-history

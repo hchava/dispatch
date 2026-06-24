@@ -1,0 +1,48 @@
+pipeline: user-events
+owner: growth-data-team
+slack_channel: "#oncall-growth-data"
+sla: hourly, within 15 minutes of window close
+freshness_threshold_hours: 2
+
+schema:
+  - name: event_id
+    type: STRING
+    nullable: false
+    description: Unique event identifier.
+  - name: user_id
+    type: STRING
+    nullable: true
+    description: Null for anonymous (pre-login) events.
+  - name: session_id
+    type: STRING
+    nullable: false
+    description: Browser/app session identifier.
+  - name: event_type
+    type: STRING
+    nullable: false
+    description: "Categorical event name. Examples: page_view, add_to_cart, checkout_start."
+  - name: event_ts
+    type: TIMESTAMP
+    nullable: false
+    description: UTC timestamp of the event (client-side, may have clock skew up to 5s).
+  - name: properties
+    type: JSON
+    nullable: true
+    description: Arbitrary event metadata. Schema varies by event_type.
+
+quality_rules:
+  - rule: late_arrival_rate
+    threshold: "> 5% of events more than 1 hour late"
+    severity: P1
+  - rule: duplicate_event_id_rate
+    threshold: "> 0.01%"
+    severity: P1
+
+upstream_dependencies:
+  - pipeline: kafka-user-events-consumer
+    sla: continuous (lag < 30s)
+
+downstream_consumers:
+  - funnel-analytics
+  - experiment-assignment-log
+  - ml-feature-user-activity
